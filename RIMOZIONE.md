@@ -1,99 +1,79 @@
 # Rimozione
 
-Come togliere tutto ciò che l'installazione ha aggiunto al sistema.
+## Con un solo comando
 
-Le eliminazioni sono definitive. Prima salva i video e tutto ciò che vuoi conservare. I comandi sono per Mac e Linux; su Windows i percorsi equivalenti sono sotto `%USERPROFILE%`.
+Dalla cartella del repository, su Mac o Linux:
 
-## Cosa viene installato e dove
+```bash
+bash scripts/rimuovi.sh
+```
+
+Lo script mostra l'elenco completo di ciò che rimuoverà e chiede conferma. La rimozione è definitiva.
+
+| Opzione | Effetto |
+|---|---|
+| `--prova` | Mostra l'elenco senza rimuovere nulla |
+| `--mantieni-programmi` | Non tocca FFmpeg, uv e i loro dati, utile se li usi per altro |
+| `--si` | Non chiede conferma |
+
+Se Homebrew appartiene a un altro utente del Mac, lo script chiede la password di quell'account. Se non riesce a rimuovere i programmi, completa comunque il resto e rimanda al passaggio manuale qui sotto.
+
+### Cosa resta
+
+- **`videos/`:** girato, video finali, timeline, sottotitoli e tutti gli altri file di ogni video.
+- **`brand/`:** logo, font e musica.
+- **Le tue impostazioni:** `CLAUDE.md`, `STYLE-GUIDE.md`, `lessons.md`, `glossario.txt` e `motion/src/kit/theme.ts`.
+- **`motion/out/`:** le grafiche renderizzate a parte.
+- **Ogni altro file che hai aggiunto al progetto o modificato** rispetto alla versione pubblicata.
+- **`.git`,** se contiene commit non pubblicati.
+- **Git, Node e Homebrew.**
+
+### Cosa viene rimosso
 
 | Elemento | Percorso | Spazio indicativo |
 |---|---|---|
 | freecut, il suo ambiente Python e Whisper | `~/tools/freecut` | 1,2 GB |
 | Skill freecut per Claude Code | `~/.claude/skills/freecut` | Solo un collegamento |
 | Modello Whisper | `~/.cache/huggingface` | 1,5 GB |
-| Python scaricato da uv e cache di uv | `~/.local/share/uv`, `~/.cache/uv` | 1,3 GB |
 | Cache dei comandi `npx` | `~/.npm/_npx` | Fino a qualche centinaio di MB |
-| Progetto, Remotion e browser di rendering | La cartella del repository | Circa 900 MB, più i video |
-| FFmpeg, uv e dipendenze | Gestiti da Homebrew o dal sistema | Variabile |
+| Remotion, browser di rendering e skill | `motion/node_modules`, `motion/.agents`, `motion/.claude` | Circa 900 MB |
+| File del progetto non modificati | La cartella del repository | Pochi MB |
+| Python scaricato da uv e cache di uv | `~/.local/share/uv`, `~/.cache/uv` | 1,3 GB |
+| Riga di FFmpeg nel percorso del terminale | `~/.zshrc` | Una riga |
+| FFmpeg, uv e le dipendenze rimaste inutilizzate | Gestiti da Homebrew | Variabile |
 
-### Una nota su whisper.cpp
+Le ultime tre righe vengono saltate con `--mantieni-programmi`. Se in `~/.cache/huggingface` ci sono altri modelli, lo script toglie solo quello di questo progetto. Su Mac, `ffmpeg-full` porta con sé anche `whisper.cpp`, `llama.cpp` e `tesseract`, rimossi insieme alle altre dipendenze inutilizzate.
 
-Il progetto trascrive con mlx-whisper o faster-whisper, dentro `~/tools/freecut/.venv`. Su Mac, `ffmpeg-full` installa però anche `whisper.cpp` (comando `whisper-cli`), `llama.cpp` e `tesseract` come proprie dipendenze. Vengono gestiti al passaggio 3.
+## A mano
 
-## 1. Rimuovi i file del tuo account
-
-```bash
-rm -f ~/.claude/skills/freecut
-```
-
-```bash
-rm -rf ~/tools/freecut
-```
-
-`rmdir` fallisce se in `~/tools` ci sono altri file: in quel caso la cartella resta dov'è.
-
-```bash
-rmdir ~/tools
-```
-
-Se usi uv per altri progetti, salta questo comando: elimina anche i Python e la cache che usano.
-
-```bash
-rm -rf ~/.local/share/uv ~/.cache/uv
-```
-
-Se usi altri modelli Hugging Face, salta questo comando e togli solo il modello dalla cartella `hub`.
-
-```bash
-rm -rf ~/.cache/huggingface
-```
-
-Facoltativo: la cache di `npx` può contenere pacchetti di altri progetti, ma viene ricreata quando serve.
-
-```bash
-rm -rf ~/.npm/_npx
-```
-
-## 2. Togli FFmpeg dal percorso del terminale
-
-Solo se hai aggiunto la riga su Mac.
-
-```bash
-sed -i '' '/ffmpeg-full/d' ~/.zshrc
-```
-
-## 3. Rimuovi i programmi
-
-Salta i programmi che usi anche per altro. Non rimuovere Git, Node o Homebrew se c'erano già prima.
+Serve su Windows, oppure se lo script non riesce a rimuovere i programmi.
 
 **Mac**
+
+Se Homebrew appartiene a un altro utente, esegui i comandi da quell'account.
 
 ```bash
 brew uninstall ffmpeg-full uv
 ```
 
-Guarda quali dipendenze inutilizzate verrebbero rimosse:
+Guarda quali dipendenze inutilizzate verrebbero rimosse. L'elenco include tutte quelle orfane del Mac, anche se non legate a questo progetto:
 
 ```bash
 brew autoremove --dry-run
 ```
 
-`autoremove` include tutte le dipendenze orfane del Mac, anche quelle non legate a questo progetto. Se l'elenco va bene:
+Se l'elenco va bene:
 
 ```bash
 brew autoremove
 ```
 
-Se Homebrew appartiene a un altro utente del Mac, esegui questi comandi da quell'account.
-
 **Linux (Debian/Ubuntu)**
+
+Lo script non rimuove i pacchetti di sistema:
 
 ```bash
 sudo apt remove ffmpeg
-```
-
-```bash
-rm -f ~/.local/bin/uv ~/.local/bin/uvx
 ```
 
 **Windows (PowerShell)**
@@ -106,28 +86,24 @@ winget uninstall Gyan.FFmpeg
 winget uninstall astral-sh.uv
 ```
 
-## 4. Rimuovi il progetto
-
-**Questo elimina anche i video, le regole e le grafiche.** Spostali altrove se vuoi conservarli. Sostituisci il percorso con quello del tuo repository:
-
-```bash
-rm -rf "/percorso/del/repository"
+```powershell
+Remove-Item -Force "$HOME\.claude\skills\freecut"
 ```
 
-## 5. Verifica
+```powershell
+Remove-Item -Recurse -Force "$HOME\tools\freecut", "$HOME\.cache\huggingface"
+```
+
+Elimina poi `motion\node_modules`, `motion\.agents` e `motion\.claude` dalla cartella del repository. Se usi altri modelli Hugging Face, non eliminare `.cache\huggingface` per intero.
+
+## Verifica
 
 Apri un nuovo terminale. Questi comandi non devono trovare nulla:
 
 ```bash
-command -v ffmpeg uv whisper-cli
+command -v ffmpeg uv
 ```
 
 ```bash
 ls -d ~/tools/freecut ~/.claude/skills/freecut
 ```
-
-`whisper-cli` può restare solo se un altro pacchetto ne ha bisogno.
-
-## Cosa non viene installato
-
-Nessun servizio in background e nessuna chiave API. DaVinci Resolve è facoltativo e si disinstalla come una normale applicazione.

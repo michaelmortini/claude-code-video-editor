@@ -105,7 +105,9 @@ Basta la versione gratuita, ma le funzioni AI di Resolve richiedono Studio. Colo
 ├── RIMOZIONE.md            # come disinstallare tutto
 ├── brand/                  # logo, font e musica del canale
 ├── motion/                 # progetto Remotion con il kit di B-roll
-├── scripts/setup.sh        # installazione automatica
+├── scripts/
+│   ├── setup.sh            # installazione automatica
+│   └── rimuovi.sh          # rimozione automatica
 ├── tools/
 │   ├── nuovo_video.py      # crea la cartella di un nuovo video
 │   ├── crea_sottotitoli.py # crea i sottotitoli a frasi naturali
@@ -145,4 +147,10 @@ Girato, audio e trascrizione vengono elaborati in locale, ma **ciò che Claude l
 
 Il codice di questo repository è sotto licenza [MIT](LICENSE). I componenti di terze parti hanno le proprie condizioni, riportate in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). In particolare, **Remotion richiede una licenza a pagamento per le aziende con più di 3 dipendenti**.
 
-Per rimuovere tutto, segui [RIMOZIONE.md](RIMOZIONE.md).
+## Rimozione
+
+Questo comando rimuove ciò che il progetto ha installato e conserva video, timeline e file creati da te. Prima chiede conferma; i dettagli sono in [RIMOZIONE.md](RIMOZIONE.md).
+
+```bash
+bash scripts/rimuovi.sh
+```

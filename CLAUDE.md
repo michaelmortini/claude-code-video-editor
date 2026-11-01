@@ -38,7 +38,7 @@ Se STYLE-GUIDE.md contiene ancora il segnaposto "[da completare]", prima di qual
 - Usa Remotion (motion/) per clip brevi, mai per renderizzare l'intero video.
 - Non usare CapCut e non controllare Resolve via script.
 - Per ogni video completato crea sempre anche la timeline per Resolve, nella cartella edit/ insieme agli altri file finali: python3 tools/edl_to_fcpxml.py edit/edl.json -o edit/timeline.fcpxml.
-- Quando installi qualcosa di nuovo sul sistema, aggiorna RIMOZIONE.md.
+- Quando installi qualcosa di nuovo sul sistema, aggiorna RIMOZIONE.md e scripts/rimuovi.sh.
 
 ## Note su freecut
 - In edl.json indica sempre "fps" uguale al girato (senza, render.py usa 24). La risoluzione di uscita resta 1080p, anche per il 4K.
