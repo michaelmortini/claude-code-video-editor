@@ -76,6 +76,17 @@ Crea anche la timeline per Resolve, capitoli, titoli e descrizione, e proponi nu
 
 Guarda sempre il video intero prima di pubblicarlo.
 
+## Personalizzare lo stile
+
+| Cosa | Dove |
+|---|---|
+| Conversione HDR e gradazione del video | `STYLE-GUIDE.md` |
+| Modalità, lunghezza e stile dei sottotitoli | `STYLE-GUIDE.md` |
+| Colori e font delle grafiche | `motion/src/kit/theme.ts` |
+| Correzioni a nomi e termini | `glossario.txt` |
+
+Per un solo video, basta chiederlo a Claude: ad esempio "per questo video usa colori più caldi".
+
 ## Rifinire in DaVinci Resolve
 
 In Resolve scegli **File > Import > Timeline** e seleziona `edit/timeline.fcpxml`, poi importa a parte `sottotitoli.srt`. La timeline punta ai file originali, quindi crea il file sul computer in cui lo usi e non spostare le cartelle.

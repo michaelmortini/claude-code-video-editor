@@ -1,8 +1,32 @@
 diff --git a/helpers/render.py b/helpers/render.py
-index 0d02cff..e678bd1 100644
+index 0d02cff..eee77bf 100644
 --- a/helpers/render.py
 +++ b/helpers/render.py
-@@ -136,11 +136,18 @@ def is_portrait_source(video: Path) -> bool:
+@@ -107,14 +107,15 @@ def resolve_path(maybe_path: str, base: Path) -> Path:
+ 
+ HDR_TRANSFERS = {"smpte2084", "arib-std-b67"}  # PQ (HDR10) and HLG
+ 
+-TONEMAP_CHAIN = (
+-    "zscale=t=linear:npl=100,"
+-    "format=gbrpf32le,"
+-    "zscale=p=bt709,"
+-    "tonemap=tonemap=hable:desat=0,"
+-    "zscale=t=bt709:m=bt709:r=tv,"
+-    "format=yuv420p"
+-)
++def tonemap_chain(tonemap: str) -> str:
++    return (
++        "zscale=t=linear:npl=100,"
++        "format=gbrpf32le,"
++        "zscale=p=bt709,"
++        f"tonemap=tonemap={tonemap}:desat=0,"
++        "zscale=t=bt709:m=bt709:r=tv,"
++        "format=yuv420p"
++    )
+ 
+ 
+ def is_hdr_source(video: Path) -> bool:
+@@ -136,11 +137,18 @@ def is_portrait_source(video: Path) -> bool:
      try:
          out = subprocess.run(
              ["ffprobe", "-v", "error", "-select_streams", "v:0",
@@ -24,15 +48,25 @@ index 0d02cff..e678bd1 100644
          return h > w
      except Exception:
          return False
-@@ -157,6 +164,7 @@ def extract_segment(
+@@ -157,6 +165,8 @@ def extract_segment(
      out_path: Path,
      preview: bool = False,
      draft: bool = False,
 +    fps: int = 24,
++    tonemap: str = "hable",
  ) -> None:
      """Extract a cut range as its own MP4 with grade + 30ms audio fades baked in.
  
-@@ -200,10 +208,11 @@ def extract_segment(
+@@ -178,7 +188,7 @@ def extract_segment(
+ 
+     vf_parts: list[str] = []
+     if is_hdr_source(source):
+-        vf_parts.append(TONEMAP_CHAIN)
++        vf_parts.append(tonemap_chain(tonemap))
+     vf_parts.append(scale)
+     if grade_filter:
+         vf_parts.append(grade_filter)
+@@ -200,10 +210,11 @@ def extract_segment(
          "-ss", f"{seg_start:.3f}",
          "-i", str(source),
          "-t", f"{duration:.3f}",
@@ -45,7 +79,7 @@ index 0d02cff..e678bd1 100644
          "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
          "-movflags", "+faststart",
          str(out_path),
-@@ -255,7 +264,10 @@ def extract_all_segments(
+@@ -255,7 +266,11 @@ def extract_all_segments(
          print(f"  [{i:02d}] {src_name}  {start:7.2f}-{end:7.2f}  ({duration:5.2f}s)  {note}")
          if is_auto:
              print(f"        grade: {seg_filter or '(none)'}")
@@ -53,7 +87,42 @@ index 0d02cff..e678bd1 100644
 +        extract_segment(
 +            src_path, start, duration, seg_filter, out_path,
 +            preview=preview, draft=draft, fps=edl.get("fps", 24),
++            tonemap=edl.get("tonemap", "hable"),
 +        )
          seg_paths.append(out_path)
  
      return seg_paths
+@@ -499,6 +514,7 @@ def build_final_composite(
+     subtitles_path: Path | None,
+     out_path: Path,
+     edit_dir: Path,
++    subtitle_style: str = SUB_FORCE_STYLE,
+ ) -> None:
+     """Final pass: base → overlays (PTS-shifted) → subtitles LAST → out.
+ 
+@@ -539,7 +555,7 @@ def build_final_composite(
+     if has_subs:
+         subs_abs = str(subtitles_path.resolve()).replace(":", r"\:").replace("'", r"\'")
+         filter_parts.append(
+-            f"{current}subtitles='{subs_abs}':force_style='{SUB_FORCE_STYLE}'[outv]"
++            f"{current}subtitles='{subs_abs}':force_style='{subtitle_style}'[outv]"
+         )
+         out_label = "[outv]"
+     else:
+@@ -640,13 +656,14 @@ def main() -> None:
+ 
+     # 4. Composite (overlays + subtitles LAST) → intermediate (pre-loudnorm) path
+     overlays = edl.get("overlays") or []
++    subtitle_style = edl.get("subtitle_style", SUB_FORCE_STYLE)
+     if args.no_loudnorm:
+         # Composite directly to final output
+-        build_final_composite(base_path, overlays, subs_path, out_path, edit_dir)
++        build_final_composite(base_path, overlays, subs_path, out_path, edit_dir, subtitle_style)
+     else:
+         # Composite to a temp file, then run loudnorm → final output
+         tmp_composite = out_path.with_suffix(".prenorm.mp4")
+-        build_final_composite(base_path, overlays, subs_path, tmp_composite, edit_dir)
++        build_final_composite(base_path, overlays, subs_path, tmp_composite, edit_dir, subtitle_style)
+         print("loudness normalization → social-ready (-14 LUFS / -1 dBTP / LRA 11)")
+         apply_loudnorm_two_pass(tmp_composite, out_path, preview=args.draft)
+         tmp_composite.unlink(missing_ok=True)

@@ -4,14 +4,13 @@
 Whisper stretches words over pauses, so each word goes to the range it overlaps most.
 Corrections come from glossario.txt, one per line: wrong => right.
 
-Usage: python3 tools/crea_sottotitoli.py <edl.json> -o <out.srt>
+Usage: python3 tools/crea_sottotitoli.py <edl.json> -o <out.srt> [--max-chars 42]
 """
 import argparse
 import json
 import re
 from pathlib import Path
 
-MAX_CHARS = 42
 MIN_COMMA_CHARS = 20
 MIN_SECONDS = 0.8
 GLOSSARY = Path(__file__).resolve().parent.parent / "glossario.txt"
@@ -96,11 +95,11 @@ def apply_glossary(words, rules):
     return fixed
 
 
-def split_cues(words):
+def split_cues(words, max_chars):
     cues = []
     current = []
     for word in words:
-        if current and len(" ".join(w[2] for w in current + [word])) > MAX_CHARS:
+        if current and len(" ".join(w[2] for w in current + [word])) > max_chars:
             carried = []
             while len(current) > 1 and norm(current[-1][2]) in NO_BREAK_AFTER:
                 carried.insert(0, current.pop())
@@ -144,11 +143,12 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("edl", type=Path)
     ap.add_argument("-o", "--output", type=Path, required=True)
+    ap.add_argument("--max-chars", type=int, default=42)
     args = ap.parse_args()
 
     edl_path = args.edl.resolve()
     words = merge_apostrophes(place_words(json.loads(edl_path.read_text()), edl_path.parent))
-    cues = split_cues(apply_glossary(words, load_glossary()))
+    cues = split_cues(apply_glossary(words, load_glossary()), args.max_chars)
     args.output.write_text(to_srt(cues))
     print(f"{args.output}: {len(cues)} sottotitoli")
 
