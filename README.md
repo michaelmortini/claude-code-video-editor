@@ -57,19 +57,13 @@ Linux, Windows, requisiti e soluzione dei problemi sono in [INSTALLAZIONE.md](IN
 
 **1. Personalizza il canale.** Completa `CLAUDE.md` e `STYLE-GUIDE.md`, e adatta i colori in `motion/src/kit/theme.ts`.
 
-**2. Crea la cartella e copiaci il girato:**
+**2. Crea la cartella del video.** Il comando usa la data di oggi, nel formato `videos/AAAA-MM-titolo/raw`:
 
 ```bash
-mkdir -p videos/2026-11-titolo/raw
+python3 tools/nuovo_video.py "Titolo del video"
 ```
 
-**3. Apri Claude Code nella cartella del repository e scrivi:**
-
-```text
-Monta il video in videos/2026-11-titolo/raw con freecut.
-Segui CLAUDE.md, STYLE-GUIDE.md e lessons.md.
-Proponimi il piano di montaggio e aspetta la mia approvazione.
-```
+**3. Copia il girato nella cartella indicata.** Poi apri Claude Code nella cartella del repository e incolla il messaggio stampato dal comando.
 
 **4. Approva nei tre momenti in cui Claude si ferma:** piano dei tagli, primo taglio ed elenco dei B-roll.
 
@@ -101,6 +95,7 @@ Basta la versione gratuita, ma le funzioni AI di Resolve richiedono Studio. Colo
 ├── motion/                 # progetto Remotion con il kit di B-roll
 ├── scripts/setup.sh        # installazione automatica
 ├── tools/
+│   ├── nuovo_video.py      # crea la cartella di un nuovo video
 │   ├── edl_to_fcpxml.py    # crea la timeline per Resolve
 │   └── freecut-local.patch # correzioni a freecut
 └── videos/                 # i tuoi video, esclusi da Git

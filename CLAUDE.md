@@ -16,6 +16,7 @@ Tipo di video: [da completare: tutorial/vlog/...], lingua italiana, formato 16:9
 - Non usare generatori video AI a pagamento.
 
 ## Processo
+- Crea le cartelle dei nuovi video con python3 tools/nuovo_video.py "Titolo": il formato è videos/AAAA-MM-titolo/raw, con la data corrente.
 - Leggi STYLE-GUIDE.md e lessons.md prima di ogni montaggio.
 - Prima di tagliare, mostra il piano con timestamp e motivazione.
 - Non modificare mai raw/.
