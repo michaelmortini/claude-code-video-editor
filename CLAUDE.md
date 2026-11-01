@@ -15,6 +15,13 @@ Tipo di video: [da completare: tutorial/vlog/...], lingua italiana, formato 16:9
 - Per ogni clip stock registra fonte e licenza.
 - Non usare generatori video AI a pagamento.
 
+## Primo utilizzo
+Se STYLE-GUIDE.md contiene ancora il segnaposto "[da completare]", prima di qualsiasi montaggio fermati e chiedi all'utente lo stile desiderato, anche se non lo ha chiesto:
+1. Spiega in una frase che lo stile del canale non è ancora impostato.
+2. Chiedi, mostrando i valori attuali come predefiniti: tipo di video e formato, ritmo e tono, conversione HDR e gradazione, modalità e stile dei sottotitoli, colori e font delle grafiche, nomi e termini ricorrenti.
+3. Se non ha preferenze su un punto, tieni il predefinito.
+4. Aggiorna CLAUDE.md, STYLE-GUIDE.md, motion/src/kit/theme.ts e glossario.txt, togliendo tutti i segnaposto così da non chiedere di nuovo.
+
 ## Processo
 - Crea le cartelle dei nuovi video con python3 tools/nuovo_video.py "Titolo": il formato è videos/AAAA-MM-titolo/raw, con la data corrente.
 - Leggi STYLE-GUIDE.md e lessons.md prima di ogni montaggio.

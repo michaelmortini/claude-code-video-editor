@@ -23,9 +23,12 @@ def main():
         ap.error("il titolo deve contenere almeno una lettera o un numero")
 
     relative = f"videos/{date.today():%Y-%m}-{title}/raw"
-    raw = Path(__file__).resolve().parent.parent / relative
+    root = Path(__file__).resolve().parent.parent
+    raw = root / relative
     raw.mkdir(parents=True, exist_ok=True)
 
+    if "[da completare]" in (root / "STYLE-GUIDE.md").read_text():
+        print("Lo stile del canale non è ancora impostato: Claude te lo chiederà prima del montaggio.\n")
     print(f"Copia il girato in: {raw}\n")
     print("Poi apri Claude Code nella cartella del progetto e scrivi:\n")
     print(f"Monta il video in {relative} con freecut.")

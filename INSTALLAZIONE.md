@@ -91,7 +91,7 @@ Su Windows sostituisci `.venv/bin/python` con `.venv\Scripts\python` e `python3`
 
 **Sui sistemi senza Apple Silicon**, in `CLAUDE.md` cambia il modello da `large-v3-turbo` a `large-v3`: è il nome adatto a faster-whisper.
 
-**Completa i file del tuo canale:**
+**Imposta lo stile del canale.** Al primo montaggio Claude ti chiede le tue preferenze e aggiorna questi file. Se preferisci, compilali prima a mano:
 - `CLAUDE.md`: tipo di video e formato.
 - `glossario.txt`: nomi propri e termini tecnici.
 - `STYLE-GUIDE.md`: ritmo, tono, colori e font.

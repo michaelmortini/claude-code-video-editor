@@ -55,7 +55,7 @@ Linux, Windows, requisiti e soluzione dei problemi sono in [INSTALLAZIONE.md](IN
 
 ## Monta un video
 
-**1. Personalizza il canale.** Completa `CLAUDE.md`, `STYLE-GUIDE.md` e `glossario.txt`, e adatta i colori in `motion/src/kit/theme.ts`.
+**1. Imposta lo stile del canale.** Al primo montaggio Claude ti chiede tipo di video, ritmo, colori e sottotitoli, poi salva le risposte. Puoi anche compilare prima i file indicati in [Personalizzare lo stile](#personalizzare-lo-stile).
 
 **2. Crea la cartella del video.** Il comando usa la data di oggi, nel formato `videos/AAAA-MM-titolo/raw`:
 
@@ -85,7 +85,7 @@ Guarda sempre il video intero prima di pubblicarlo.
 | Colori e font delle grafiche | `motion/src/kit/theme.ts` |
 | Correzioni a nomi e termini | `glossario.txt` |
 
-Per un solo video, basta chiederlo a Claude: ad esempio "per questo video usa colori più caldi".
+Tipo di video e formato sono in `CLAUDE.md`. Per un solo video, basta chiederlo a Claude: ad esempio "per questo video usa colori più caldi".
 
 ## Rifinire in DaVinci Resolve
 

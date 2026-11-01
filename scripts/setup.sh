@@ -66,4 +66,8 @@ echo "Installazione completata."
 if [ "$whisper" = "faster-whisper" ]; then
   echo "Su questo sistema cambia in CLAUDE.md il modello da large-v3-turbo a large-v3."
 fi
+if grep -q "\[da completare\]" "$ROOT/STYLE-GUIDE.md"; then
+  echo "Lo stile del canale non è ancora impostato: Claude te lo chiederà prima del primo montaggio."
+  echo "Se preferisci, modifica subito STYLE-GUIDE.md."
+fi
 echo "Apri Claude Code nella cartella del progetto e segui il README."

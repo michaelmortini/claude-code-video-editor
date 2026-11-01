@@ -1,6 +1,6 @@
 # Guida di stile
 
-Valori provvisori: sostituiscili con quelli del canale. Claude li applica a ogni montaggio, salvo diversa indicazione per un singolo video.
+Claude applica questi valori a ogni montaggio, salvo diversa indicazione per un singolo video. Finché restano segnaposto, Claude ti chiede lo stile prima del primo montaggio. Puoi anche modificare il file a mano.
 
 ## Ritmo e tono
 
