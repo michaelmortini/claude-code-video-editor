@@ -92,7 +92,8 @@ Su Windows sostituisci `.venv/bin/python` con `.venv\Scripts\python` e `python3`
 **Sui sistemi senza Apple Silicon**, in `CLAUDE.md` cambia il modello da `large-v3-turbo` a `large-v3`: è il nome adatto a faster-whisper.
 
 **Completa i file del tuo canale:**
-- `CLAUDE.md`: tipo di video, formato e glossario.
+- `CLAUDE.md`: tipo di video e formato.
+- `glossario.txt`: nomi propri e termini tecnici.
 - `STYLE-GUIDE.md`: ritmo, tono, colori e font.
 - `motion/src/kit/theme.ts`: colori e font delle grafiche.
 - `brand/`: logo, font e musica.

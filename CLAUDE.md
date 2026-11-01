@@ -37,16 +37,14 @@ Tipo di video: [da completare: tutorial/vlog/...], lingua italiana, formato 16:9
 - In edl.json indica sempre "fps" uguale al girato (senza, render.py usa 24). La risoluzione di uscita resta 1080p, anche per il 4K.
 - I percorsi in "overlays" sono relativi a edit/ (es. animations/slot_1/render.mp4), non "edit/animations/...".
 - Le chiavi di "sources" devono coincidere col nome del file sorgente, altrimenti i sottotitoli non trovano la trascrizione.
-- I sottotitoli predefiniti sono 2 parole in maiuscolo: per YouTube preferisci un SRT a frasi naturali.
+- I sottotitoli predefiniti sono 2 parole in maiuscolo: per YouTube crea invece un SRT a frasi naturali con python3 tools/crea_sottotitoli.py edit/edl.json -o edit/sottotitoli.srt, e rileggilo prima di consegnarlo.
 - Ogni taglio deve durare un numero intero di fotogrammi (a 25 fps, multipli di 0,04 s): altrimenti sottotitoli e grafiche si sfasano un po' a ogni taglio.
 - Whisper allunga le parole sulle pause e nasconde le esitazioni: decidi i tagli incrociando la trascrizione con silencedetect e la forma d'onda.
 - Modello di trascrizione: --model large-v3-turbo.
 - helpers/render.py ha modifiche locali (fotogrammi esatti, campo "fps", video verticali ruotati), salvate in tools/freecut-local.patch: conservale se aggiorni freecut e aggiorna la patch se le cambi.
 
 ## Glossario
-[nomi propri, brand, termini tecnici]
-- "Cloud Code" nella trascrizione significa di solito "Claude Code".
-- "FFMPEG" si scrive "FFmpeg".
+Nomi propri, brand e termini tecnici sono in glossario.txt, una correzione per riga: sbagliato => corretto. Aggiungi lì ogni errore ricorrente della trascrizione.
 
 # CLAUDE.md
 

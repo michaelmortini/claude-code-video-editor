@@ -33,6 +33,12 @@ const Reveal: React.FC<{ delay?: number; children: React.ReactNode }> = ({
   );
 };
 
+// In clips under 3 seconds a fade-in reads as a dark flash, so titles start visible.
+const TitleReveal: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { fps, durationInFrames } = useVideoConfig();
+  return durationInFrames < fps * 3 ? <div>{children}</div> : <Reveal>{children}</Reveal>;
+};
+
 const FullScreen: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <AbsoluteFill
     style={{
@@ -48,9 +54,9 @@ const FullScreen: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 );
 
 const Heading: React.FC<{ text: string }> = ({ text }) => (
-  <Reveal>
+  <TitleReveal>
     <div style={{ fontSize: 72, fontWeight: 800, marginBottom: 56 }}>{text}</div>
-  </Reveal>
+  </TitleReveal>
 );
 
 export const Title: React.FC<{ title: string; subtitle?: string }> = ({
@@ -58,9 +64,9 @@ export const Title: React.FC<{ title: string; subtitle?: string }> = ({
   subtitle,
 }) => (
   <FullScreen>
-    <Reveal>
+    <TitleReveal>
       <div style={{ fontSize: 120, fontWeight: 800, lineHeight: 1.05 }}>{title}</div>
-    </Reveal>
+    </TitleReveal>
     {subtitle ? (
       <Reveal delay={STAGGER}>
         <div style={{ fontSize: 48, color: theme.muted, marginTop: 32 }}>{subtitle}</div>
@@ -297,9 +303,9 @@ export const FakeUI: React.FC<{ windowTitle: string; command: string; output: st
 
 export const EndScreen: React.FC<{ title: string; cta: string }> = ({ title, cta }) => (
   <FullScreen>
-    <Reveal>
+    <TitleReveal>
       <div style={{ fontSize: 96, fontWeight: 800, textAlign: "center" }}>{title}</div>
-    </Reveal>
+    </TitleReveal>
     <Reveal delay={STAGGER}>
       <div style={{ fontSize: 48, color: theme.accent, marginTop: 32, textAlign: "center" }}>{cta}</div>
     </Reveal>

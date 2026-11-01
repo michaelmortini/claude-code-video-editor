@@ -1,0 +1,3 @@
+# Correzioni alla trascrizione, una per riga: sbagliato => corretto
+Cloud Code => Claude Code
+FFMPEG => FFmpeg

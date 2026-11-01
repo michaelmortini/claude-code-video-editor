@@ -55,7 +55,7 @@ Linux, Windows, requisiti e soluzione dei problemi sono in [INSTALLAZIONE.md](IN
 
 ## Monta un video
 
-**1. Personalizza il canale.** Completa `CLAUDE.md` e `STYLE-GUIDE.md`, e adatta i colori in `motion/src/kit/theme.ts`.
+**1. Personalizza il canale.** Completa `CLAUDE.md`, `STYLE-GUIDE.md` e `glossario.txt`, e adatta i colori in `motion/src/kit/theme.ts`.
 
 **2. Crea la cartella del video.** Il comando usa la data di oggi, nel formato `videos/AAAA-MM-titolo/raw`:
 
@@ -89,6 +89,7 @@ Basta la versione gratuita, ma le funzioni AI di Resolve richiedono Studio. Colo
 ├── CLAUDE.md               # regole del canale e istruzioni per Claude
 ├── STYLE-GUIDE.md          # ritmo, tono, colori e font
 ├── lessons.md              # errori da non ripetere, cresce a ogni video
+├── glossario.txt           # correzioni a nomi e termini nei sottotitoli
 ├── INSTALLAZIONE.md        # installazione su ogni sistema
 ├── RIMOZIONE.md            # come disinstallare tutto
 ├── brand/                  # logo, font e musica del canale
@@ -96,6 +97,7 @@ Basta la versione gratuita, ma le funzioni AI di Resolve richiedono Studio. Colo
 ├── scripts/setup.sh        # installazione automatica
 ├── tools/
 │   ├── nuovo_video.py      # crea la cartella di un nuovo video
+│   ├── crea_sottotitoli.py # crea i sottotitoli a frasi naturali
 │   ├── edl_to_fcpxml.py    # crea la timeline per Resolve
 │   └── freecut-local.patch # correzioni a freecut
 └── videos/                 # i tuoi video, esclusi da Git
