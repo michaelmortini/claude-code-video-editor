@@ -1,0 +1,12 @@
+.DS_Store
+.env
+node_modules/
+
+# Footage and renders stay on your computer.
+videos/
+motion/out/
+
+# Remotion skills are downloaded by scripts/setup.sh, not redistributed here.
+motion/.agents/
+motion/.claude/
+motion/skills-lock.json
