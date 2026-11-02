@@ -56,15 +56,15 @@ Linux, Windows, requisiti e soluzione dei problemi sono in [INSTALLAZIONE.md](IN
 
 ## Monta un video
 
-**1. Imposta lo stile del canale.** Al primo montaggio Claude ti chiede tipo di video, ritmo, colori e sottotitoli, poi salva le risposte. Puoi anche compilare prima i file indicati in [Personalizzare lo stile](#personalizzare-lo-stile).
-
-**2. Crea la cartella del video.** Il comando usa la data di oggi, nel formato `videos/AAAA-MM-titolo/raw`:
+**1. Chiedi a Claude di montare un nuovo video.** Apri Claude Code nella cartella del repository e scrivilo. Claude ti chiede il titolo, anche provvisorio, e crea la cartella con la data di oggi, nel formato `videos/AAAA-MM-titolo/raw`. Se preferisci crearla da solo, lancia questo comando e poi incolla in Claude Code il messaggio che stampa:
 
 ```bash
 python3 tools/nuovo_video.py "Titolo del video"
 ```
 
-**3. Copia il girato nella cartella indicata.** Poi apri Claude Code nella cartella del repository e incolla il messaggio stampato dal comando.
+**2. Copia il girato nella cartella indicata.**
+
+**3. Imposta lo stile del canale.** Al primo montaggio Claude ti chiede tipo di video, ritmo, colori e sottotitoli, poi salva le risposte. Puoi anche compilare prima i file indicati in [Personalizzare lo stile](#personalizzare-lo-stile).
 
 **4. Scegli gli output.** Prima del piano dei tagli Claude elenca tutto ciò che creerà, come in [Cosa ottieni](#cosa-ottieni). Puoi saltare sottotitoli, B-roll e grafiche, timeline per Resolve e `pubblicazione.md`.
 

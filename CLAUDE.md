@@ -23,7 +23,7 @@ Se STYLE-GUIDE.md contiene ancora il segnaposto "[da completare]", prima di qual
 4. Aggiorna CLAUDE.md, STYLE-GUIDE.md, motion/src/kit/theme.ts e glossario.txt, togliendo tutti i segnaposto così da non chiedere di nuovo.
 
 ## Processo
-- Crea le cartelle dei nuovi video con python3 tools/nuovo_video.py "Titolo": il formato è videos/AAAA-MM-titolo/raw, con la data corrente.
+- Quando l'utente vuole montare un nuovo video, come prima cosa chiedi il titolo (se non lo sa, usane uno provvisorio) e lancia python3 tools/nuovo_video.py "Titolo": il formato è videos/AAAA-MM-titolo/raw, con la data corrente. Dell'output riferisci solo dove copiare il girato. Non lanciarlo per un video che ha già la sua cartella. Se il piano divide il girato in più video, crea le altre cartelle con lo stesso script.
 - Leggi STYLE-GUIDE.md e lessons.md prima di ogni montaggio.
 - All'inizio di ogni montaggio, prima del piano dei tagli, elenca tutti gli output previsti e chiedi se l'utente vuole saltarne qualcuno. Si possono saltare sottotitoli, B-roll e grafiche, timeline per Resolve e pubblicazione.md; restano sempre versioni numerate, video finale, edl.json e project.md. Annota la scelta in edit/project.md e rispettala fino alla fine del video.
 - Prima di tagliare, mostra il piano con timestamp e motivazione.
