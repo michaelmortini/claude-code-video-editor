@@ -66,13 +66,15 @@ python3 tools/nuovo_video.py "Titolo del video"
 
 **3. Copia il girato nella cartella indicata.** Poi apri Claude Code nella cartella del repository e incolla il messaggio stampato dal comando.
 
-**4. Approva nei tre momenti in cui Claude si ferma:** piano dei tagli, primo taglio ed elenco dei B-roll.
+**4. Scegli gli output.** Prima del piano dei tagli Claude elenca tutto ciò che creerà, come in [Cosa ottieni](#cosa-ottieni). Puoi saltare sottotitoli, B-roll e grafiche, timeline per Resolve e `pubblicazione.md`.
 
-**5. Chiudi il video:**
+**5. Approva nei tre momenti in cui Claude si ferma:** piano dei tagli, primo taglio ed elenco dei B-roll.
+
+**6. Chiudi il video:**
 
 ```text
-Il montaggio è approvato. Aggiungi sottotitoli, esegui il controllo qualità ed esporta per YouTube.
-Crea anche la timeline per Resolve, capitoli, titoli e descrizione, e proponi nuove regole per lessons.md.
+Il montaggio è approvato. Esegui il controllo qualità, esporta per YouTube e crea gli altri output scelti.
+Proponi anche nuove regole per lessons.md.
 ```
 
 Guarda sempre il video intero prima di pubblicarlo.

@@ -25,12 +25,14 @@ Se STYLE-GUIDE.md contiene ancora il segnaposto "[da completare]", prima di qual
 ## Processo
 - Crea le cartelle dei nuovi video con python3 tools/nuovo_video.py "Titolo": il formato è videos/AAAA-MM-titolo/raw, con la data corrente.
 - Leggi STYLE-GUIDE.md e lessons.md prima di ogni montaggio.
+- All'inizio di ogni montaggio, prima del piano dei tagli, elenca tutti gli output previsti e chiedi se l'utente vuole saltarne qualcuno. Si possono saltare sottotitoli, B-roll e grafiche, timeline per Resolve e pubblicazione.md; restano sempre versioni numerate, video finale, edl.json e project.md. Annota la scelta in edit/project.md e rispettala fino alla fine del video.
 - Prima di tagliare, mostra il piano con timestamp e motivazione.
 - Non modificare mai raw/.
 - Numera ogni versione renderizzata e non sovrascrivere le precedenti. Chiamala come la cartella del video, con il numero in fondo: edit/AAAA-MM-titolo-v1.mp4, edit/AAAA-MM-titolo-v2.mp4.
 - Quando l'utente approva una versione, rinominala edit/AAAA-MM-titolo-final.mp4 (mv, mai una copia).
 - Dopo l'approvazione elimina i file rigenerabili in edit/: clips_graded/, clips_preview/, clips_draft/, base*.mp4, *.prenorm.mp4 e le bozze in verify/. Le versioni precedenti si eliminano solo se l'utente lo conferma.
 - Dopo ogni modifica ai tagli, riallinea sottotitoli, B-roll ed effetti.
+- Per ogni video completato crea sempre anche edit/pubblicazione.md, con titoli, descrizione, capitoli e crediti, salvo che l'utente abbia chiesto di saltarlo. Finché manca, il video non è finito.
 
 ## Strumenti
 - freecut è in ~/tools/freecut (commit f1d4334): segui il suo SKILL.md e usa il suo .venv.
@@ -39,7 +41,7 @@ Se STYLE-GUIDE.md contiene ancora il segnaposto "[da completare]", prima di qual
 - Trascrivi con: --backend whisper --language it. Mai un modello ".en".
 - Usa Remotion (motion/) per clip brevi, mai per renderizzare l'intero video.
 - Non usare CapCut e non controllare Resolve via script.
-- Per ogni video completato crea sempre anche la timeline per Resolve, nella cartella edit/ insieme agli altri file finali: python3 tools/edl_to_fcpxml.py edit/edl.json -o edit/timeline.fcpxml.
+- Per ogni video completato crea sempre anche la timeline per Resolve, salvo che l'utente abbia chiesto di saltarla, nella cartella edit/ insieme agli altri file finali: python3 tools/edl_to_fcpxml.py edit/edl.json -o edit/timeline.fcpxml.
 - Quando installi qualcosa di nuovo sul sistema, aggiorna RIMOZIONE.md e scripts/rimuovi.sh.
 
 ## Note su freecut
