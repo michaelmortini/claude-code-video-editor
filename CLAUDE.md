@@ -27,6 +27,7 @@ Se STYLE-GUIDE.md contiene ancora il segnaposto "[da completare]", prima di qual
 - Leggi STYLE-GUIDE.md e lessons.md prima di ogni montaggio.
 - All'inizio di ogni montaggio, prima del piano dei tagli, elenca tutti gli output previsti e chiedi se l'utente vuole saltarne qualcuno. Si possono saltare sottotitoli, B-roll e grafiche, timeline per Resolve e pubblicazione.md; restano sempre versioni numerate, video finale, edl.json e project.md. Annota la scelta in edit/project.md e rispettala fino alla fine del video.
 - Prima di tagliare, mostra il piano con timestamp e motivazione.
+- Se il girato comprende più file, indica nel piano quanti video finali proponi, quali file vanno in ciascuno e perché, e aspetta la conferma dell'utente prima di tagliare.
 - Non modificare mai raw/.
 - Numera ogni versione renderizzata e non sovrascrivere le precedenti. Chiamala come la cartella del video, con il numero in fondo: edit/AAAA-MM-titolo-v1.mp4, edit/AAAA-MM-titolo-v2.mp4.
 - Quando l'utente approva una versione, rinominala edit/AAAA-MM-titolo-final.mp4 (mv, mai una copia).
