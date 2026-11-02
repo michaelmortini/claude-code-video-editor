@@ -14,7 +14,8 @@ Per ogni video, in `videos/<nome-video>/edit/`:
 
 | File | Contenuto |
 |---|---|
-| `youtube.mp4` | Video finale, pronto da caricare |
+| `<nome-video>-v1.mp4`, `-v2.mp4`... | Versioni renderizzate, numerate |
+| `<nome-video>-final.mp4` | Video finale, pronto da caricare: è la versione approvata, rinominata senza crearne una copia |
 | `sottotitoli.srt` | Sottotitoli da caricare a parte |
 | `pubblicazione.md` | Titoli, descrizione, capitoli e crediti |
 | `timeline.fcpxml` | Timeline da rifinire in DaVinci Resolve |
