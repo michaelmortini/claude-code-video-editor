@@ -1,8 +1,16 @@
 diff --git a/helpers/render.py b/helpers/render.py
-index 0d02cff..eee77bf 100644
+index 0d02cff..660c3c3 100644
 --- a/helpers/render.py
 +++ b/helpers/render.py
-@@ -107,14 +107,15 @@ def resolve_path(maybe_path: str, base: Path) -> Path:
+@@ -25,6 +25,7 @@ import argparse
+ import json
+ import re
+ import subprocess
++import wave
+ import sys
+ from pathlib import Path
+ 
+@@ -107,14 +108,15 @@ def resolve_path(maybe_path: str, base: Path) -> Path:
  
  HDR_TRANSFERS = {"smpte2084", "arib-std-b67"}  # PQ (HDR10) and HLG
  
@@ -26,7 +34,7 @@ index 0d02cff..eee77bf 100644
  
  
  def is_hdr_source(video: Path) -> bool:
-@@ -136,11 +137,18 @@ def is_portrait_source(video: Path) -> bool:
+@@ -136,11 +138,18 @@ def is_portrait_source(video: Path) -> bool:
      try:
          out = subprocess.run(
              ["ffprobe", "-v", "error", "-select_streams", "v:0",
@@ -48,7 +56,7 @@ index 0d02cff..eee77bf 100644
          return h > w
      except Exception:
          return False
-@@ -157,6 +165,8 @@ def extract_segment(
+@@ -157,6 +166,8 @@ def extract_segment(
      out_path: Path,
      preview: bool = False,
      draft: bool = False,
@@ -57,7 +65,7 @@ index 0d02cff..eee77bf 100644
  ) -> None:
      """Extract a cut range as its own MP4 with grade + 30ms audio fades baked in.
  
-@@ -178,7 +188,7 @@ def extract_segment(
+@@ -178,7 +189,7 @@ def extract_segment(
  
      vf_parts: list[str] = []
      if is_hdr_source(source):
@@ -66,7 +74,7 @@ index 0d02cff..eee77bf 100644
      vf_parts.append(scale)
      if grade_filter:
          vf_parts.append(grade_filter)
-@@ -200,10 +210,11 @@ def extract_segment(
+@@ -200,10 +211,11 @@ def extract_segment(
          "-ss", f"{seg_start:.3f}",
          "-i", str(source),
          "-t", f"{duration:.3f}",
@@ -79,7 +87,7 @@ index 0d02cff..eee77bf 100644
          "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
          "-movflags", "+faststart",
          str(out_path),
-@@ -255,7 +266,11 @@ def extract_all_segments(
+@@ -255,7 +267,11 @@ def extract_all_segments(
          print(f"  [{i:02d}] {src_name}  {start:7.2f}-{end:7.2f}  ({duration:5.2f}s)  {note}")
          if is_auto:
              print(f"        grade: {seg_filter or '(none)'}")
@@ -92,7 +100,60 @@ index 0d02cff..eee77bf 100644
          seg_paths.append(out_path)
  
      return seg_paths
-@@ -499,6 +514,7 @@ def build_final_composite(
+@@ -283,6 +299,52 @@ def concat_segments(segment_paths: list[Path], out_path: Path, edit_dir: Path) -
+     concat_list.unlink(missing_ok=True)
+ 
+ 
++def replace_with_exact_audio(edl: dict, edit_dir: Path, base_path: Path) -> None:
++    """Rebuild the base audio straight from the sources, sample-exact per range.
++
++    Each AAC segment starts with ~21 ms of encoder priming and is cut to whole
++    AAC frames, so `-c copy` concat shifts the audio a little at every cut; with
++    hundreds of cuts the voice drifts seconds behind the picture. Here every
++    range gets exactly as many samples as its video frames last (boundaries
++    computed on the cumulative timeline, so rounding never accumulates).
++    """
++    from fractions import Fraction
++
++    sr = 48000
++    fps = Fraction(edl.get("fps", 24)).limit_denominator(1001)
++    wav_path = edit_dir / "_exact_audio.wav"
++    frames_done = 0
++    print("exact audio → rebuilding the soundtrack sample-exact per range")
++    with wave.open(str(wav_path), "wb") as wav:
++        wav.setnchannels(2)
++        wav.setsampwidth(2)
++        wav.setframerate(sr)
++        for r in edl["ranges"]:
++            src = resolve_path(edl["sources"][r["source"]], edit_dir)
++            n_frames = round((float(r["end"]) - float(r["start"])) * fps)
++            s0 = round(frames_done * sr / fps)
++            frames_done += n_frames
++            n = round(frames_done * sr / fps) - s0
++            dur = n / sr
++            af = f"afade=t=in:st=0:d=0.03,afade=t=out:st={max(0.0, dur - 0.03):.6f}:d=0.03"
++            pcm = subprocess.run(
++                ["ffmpeg", "-v", "error", "-ss", f"{float(r['start']):.6f}", "-i", str(src),
++                 "-t", f"{dur:.6f}", "-vn", "-af", af, "-ac", "2", "-ar", str(sr),
++                 "-f", "s16le", "pipe:1"],
++                check=True, capture_output=True,
++            ).stdout
++            wav.writeframes(pcm[: n * 4].ljust(n * 4, b"\0"))
++
++    tmp = base_path.with_name(base_path.stem + ".exactaudio.mp4")
++    run([
++        "ffmpeg", "-y", "-v", "error", "-i", str(base_path), "-i", str(wav_path),
++        "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy",
++        "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", str(tmp),
++    ], quiet=True)
++    tmp.replace(base_path)
++    wav_path.unlink(missing_ok=True)
++
++
+ # -------- Master SRT (Rule 5) ------------------------------------------------
+ 
+ 
+@@ -499,6 +561,7 @@ def build_final_composite(
      subtitles_path: Path | None,
      out_path: Path,
      edit_dir: Path,
@@ -100,7 +161,7 @@ index 0d02cff..eee77bf 100644
  ) -> None:
      """Final pass: base → overlays (PTS-shifted) → subtitles LAST → out.
  
-@@ -539,7 +555,7 @@ def build_final_composite(
+@@ -539,7 +602,7 @@ def build_final_composite(
      if has_subs:
          subs_abs = str(subtitles_path.resolve()).replace(":", r"\:").replace("'", r"\'")
          filter_parts.append(
@@ -109,7 +170,15 @@ index 0d02cff..eee77bf 100644
          )
          out_label = "[outv]"
      else:
-@@ -640,13 +656,14 @@ def main() -> None:
+@@ -625,6 +688,7 @@ def main() -> None:
+         base_name = "base.mp4"
+     base_path = edit_dir / base_name
+     concat_segments(segment_paths, base_path, edit_dir)
++    replace_with_exact_audio(edl, edit_dir, base_path)
+ 
+     # 3. Subtitles: build if requested, resolve final path
+     subs_path: Path | None = None
+@@ -640,13 +704,14 @@ def main() -> None:
  
      # 4. Composite (overlays + subtitles LAST) → intermediate (pre-loudnorm) path
      overlays = edl.get("overlays") or []

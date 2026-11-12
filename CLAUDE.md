@@ -55,7 +55,7 @@ Se STYLE-GUIDE.md contiene ancora il segnaposto "[da completare]", prima di qual
 - Ogni taglio deve durare un numero intero di fotogrammi (a 25 fps, multipli di 0,04 s): altrimenti sottotitoli e grafiche si sfasano un po' a ogni taglio.
 - Whisper allunga le parole sulle pause e nasconde le esitazioni: decidi i tagli incrociando la trascrizione con silencedetect e la forma d'onda.
 - Modello di trascrizione: --model large-v3-turbo.
-- helpers/render.py ha modifiche locali (fotogrammi esatti, campi "fps", "tonemap" e "subtitle_style", video verticali ruotati), salvate in tools/freecut-local.patch: conservale se aggiorni freecut e aggiorna la patch se le cambi.
+- helpers/render.py ha modifiche locali (fotogrammi esatti, campi "fps", "tonemap" e "subtitle_style", video verticali ruotati, audio ricostruito dal girato al campione esatto per evitare la deriva sui tagli), salvate in tools/freecut-local.patch: conservale se aggiorni freecut e aggiorna la patch se le cambi.
 
 ## Glossario
 Nomi propri, brand e termini tecnici sono in glossario.txt, una correzione per riga: sbagliato => corretto. Aggiungi lì ogni errore ricorrente della trascrizione.
